@@ -4,12 +4,12 @@
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" type="text/css" href="style1.css">
+	<!-- <link rel="stylesheet" type="text/css" href="style1.css"> -->
 	<title>FF Survey</title>
 </head>
 <body>
 	<div class="container">
-		<h2>Friendly Questions</h2>
+		<h2>Friendly Questions!!!</h2>
 
 		<hr>
 		
@@ -20,7 +20,7 @@
 		<input type="text" name="name" id="name" class="form-control" required>
 
 		<h4>Link to photo (Required)</h4>
-		<input type="text" name="pic" id="pic" class="form-control" required>
+		<input type="text" id="photo" class="form-control" required>
 		
 		<hr>
 
@@ -136,12 +136,90 @@
 
       	<br>
 
-      	<button type="button" class="btn btn-info btn-lg" id="submitBtn">Submit</button>
+      	<button type="button" class="btn btn-info btn-lg btn-block" id="submitBtn">Submit</button>
 	</div>
 
-	<script
-  src="https://code.jquery.com/jquery-3.2.1.min.js"
-  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-  crossorigin="anonymous"></script>
+      <div id="resultsModal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+              <!-- Modal content-->
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h2 class="modal-title"><strong>Best Match</strong></h2>
+                </div>
+                <div class="modal-body">
+                  <h2 id="matchName"></h2>
+                  <img id="matchImg" src="" alt="Nothing">
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+      </div>
+            <footer>
+              <a href="/api/friends">Friends List</a>
+            </footer>
+
+	<script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+<script type="text/javascript">
+  // Capture the form inputs 
+    $("#submitBtn").on("click", function(){
+
+      // Form validation
+      function validateForm() {
+              var isValid = true;
+              $('.form-control').each(function() {
+                if ( $(this).val() === '' )
+                    isValid = false;
+              });
+
+              $('.chosen-select').each(function() {
+
+                  if( $(this).val() === "")
+                        isValid = false
+              })
+              return isValid;
+            }
+
+            // If all required fields are filled
+            if (validateForm() == true)
+            {
+                  // Create an object for the user's data
+            var userData = {
+                  name: $("#name").val(),
+                  photo: $("#photo").val(),
+                  scores: [$("#q1").val(), $("#q2").val(), $("#q3").val(), $("#q4").val(), $("#q5").val(), $("#q6").val(), $("#q7").val(), $("#q8").val(), $("#q9").val(), $("#q10").val(), ]
+            }
+
+            userData.scores = userData.scores.map(Number)
+            // Grab the URL of the website
+            var currentURL = window.location.origin;
+
+            // AJAX post the data to the friends API. 
+            $.post(currentURL + "/api/friends", userData, function(data){
+
+                  // Grab the result from the AJAX post so that the best match's name and photo are displayed.
+                  console.log(data);
+                  $("#matchName").text(data.name);
+                  $('#matchImg').attr("src", data.photo);
+
+                  // Show the modal with the best match 
+                  $("#resultsModal").modal('toggle');
+
+            });
+            }
+            else
+            {
+                  alert("Please fill out all fields before submitting!");
+            }
+      
+      return false;
+    });
+
+
+  </script>
 </body>
 </html>

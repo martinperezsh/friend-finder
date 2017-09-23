@@ -1,0 +1,24 @@
+{
+  "name": "friend-finder",
+  "version": "1.0.0",
+  "description": "Tinder type app except for finding friends",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinperezsh/friend-finder.git"
+  },
+  "author": "Martin D Perez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martinperezsh/friend-finder/issues"
+  },
+  "homepage": "https://github.com/martinperezsh/friend-finder#readme",
+  "dependencies": {
+    "body-parser": "^1.18.1",
+    "express": "^4.15.4"
+  }
+}
